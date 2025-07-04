@@ -26,4 +26,14 @@ describe('Course CRUD (Red → Green)', () => {
         if (res.body.title !== 'JS Basics') throw new Error('Title incorrecto');
       })
   );
+  // Test RED de GET /courses/:id
+  it('GET /courses/:id → debería devolver 200 y el curso correcto, pero da 404', () =>
+    request(app)
+      .get('/courses/1')
+      .expect(200)
+      .expect(res => {
+        if (res.body.id !== 1) throw new Error('ID incorrecto');
+      })
+  );
+
 });
