@@ -2,7 +2,7 @@ import request from 'supertest';
 import app from '../src/app.js';
 
 describe('Course CRUD (Red → Green)', () => {
-  // --- Nuevo test RED:
+  // --- Nuevo test RED: para todas las rutas que no existen
   it('GET /courses → 404 mientras no exista la ruta', () =>
     request(app)
       .get('/courses')
@@ -15,7 +15,7 @@ describe('Course CRUD (Red → Green)', () => {
   );
 
   
-  // --- Test GREEN: Post para crear un curso
+  // --- Test : Post para crear un curso
   it('POST /courses → 201 con id y title', () =>
     request(app)
       .post('/courses')
@@ -26,7 +26,7 @@ describe('Course CRUD (Red → Green)', () => {
         if (res.body.title !== 'JS Basics') throw new Error('Title incorrecto');
       })
   );
-  // Test RED de GET /courses/:id
+  // Test de GET para buscar un curso por id 
   it('GET /courses/:id → 200 con el curso correcto tras crearlo', async () => {
     // 1. Creamos un curso
     const postRes = await request(app)
@@ -48,6 +48,28 @@ describe('Course CRUD (Red → Green)', () => {
     if (getRes.body.title !== 'JS Basics') {
       throw new Error(`Esperaba title 'JS Basics', pero vino '${getRes.body.title}'`);
     }
+  });
+
+  // Test Put para actualizar un curso
+  it('PUT /courses/:id → debería devolver 200 y curso actualizado (Red)', async () => {
+    // Creamos un curso nuevo
+    const post = await request(app)
+      .post('/courses')
+      .send({ title: 'Old Title' })
+      .expect(201);
+
+    const id = post.body.id;
+
+    // Ahora intentamos actualizarlo
+    await request(app)
+      .put(`/courses/${id}`)
+      .send({ title: 'New Title' })
+      .expect(200)
+      .expect(res => {
+        if (res.body.title !== 'New Title') {
+          throw new Error(`Title no fue actualizado, vino ${res.body.title}`);
+        }
+      });
   });
 
 });
