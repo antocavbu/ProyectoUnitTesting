@@ -1,0 +1,71 @@
+# ==========================================
+# CONFIGURACIÓN PARA PROYECTO ACADÉMICO
+# ==========================================
+# Este .gitignore está configurado para un proyecto que será
+# evaluado academicamente, por lo que algunos archivos que
+# normalmente se excluirían están disponibles para revisión:
+#
+# - Reportes de cobertura de pruebas (coverage/)
+# - Archivos de base de datos con datos de prueba
+# - Cualquier archivo necesario para la evaluación
+# ==========================================
+
+# Dependencies
+node_modules/
+
+# Environment variables
+.env
+
+# Test coverage (comentado para evaluación académica)
+# coverage/
+
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Runtime data
+pids
+*.pid
+*.seed
+*.pid.lock
+
+
+# Output of 'npm pack'
+*.tgz
+
+# Yarn Integrity file
+.yarn-integrity
+
+# dotenv environment variables file
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# IDE and editor files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Build output
+dist/
+build/
+
+# Database files (comentado para evaluación académica)
+# *.sqlite
+# *.sqlite3
+# *.db

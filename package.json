@@ -1,0 +1,32 @@
+{
+  "name": "course-student-fp",
+  "version": "1.0.0",
+  "main": "src/app.js",
+  "type": "module",
+  "start": "node src/app.js",
+  "scripts": {
+    "start": "node -r @babel/register src/app.js",
+    "dev": "nodemon --require @babel/register src/app.js",
+    "test": "cross-env NODE_ENV=test jest --coverage --runInBand"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "dotenv": "^17.0.1",
+    "express": "^5.1.0",
+    "knex": "^3.1.0",
+    "sqlite3": "^5.1.7"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.28.0",
+    "@babel/preset-env": "^7.28.0",
+    "@babel/register": "^7.27.1",
+    "babel-jest": "^30.0.4",
+    "cross-env": "^7.0.3",
+    "jest": "^30.0.4",
+    "nodemon": "^3.1.10",
+    "supertest": "^7.1.1"
+  }
+}
