@@ -27,13 +27,27 @@ describe('Course CRUD (Red → Green)', () => {
       })
   );
   // Test RED de GET /courses/:id
-  it('GET /courses/:id → debería devolver 200 y el curso correcto, pero da 404', () =>
-    request(app)
-      .get('/courses/1')
-      .expect(200)
-      .expect(res => {
-        if (res.body.id !== 1) throw new Error('ID incorrecto');
-      })
-  );
+  it('GET /courses/:id → 200 con el curso correcto tras crearlo', async () => {
+    // 1. Creamos un curso
+    const postRes = await request(app)
+      .post('/courses')
+      .send({ title: 'JS Basics' })
+      .expect(201);
+
+    const createdId = postRes.body.id;
+
+    // 2. Luego pedimos ese curso por id
+    const getRes = await request(app)
+      .get(`/courses/${createdId}`)
+      .expect(200);
+
+    // 3. Comprobamos que el id y title coincidan
+    if (getRes.body.id !== createdId) {
+      throw new Error(`Esperaba id ${createdId}, pero vino ${getRes.body.id}`);
+    }
+    if (getRes.body.title !== 'JS Basics') {
+      throw new Error(`Esperaba title 'JS Basics', pero vino '${getRes.body.title}'`);
+    }
+  });
 
 });
