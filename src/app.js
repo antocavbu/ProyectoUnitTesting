@@ -3,7 +3,14 @@ import express from 'express';
 const app = express();
 app.use(express.json());
 
-// Stub: cualquier ruta → 404 sin patrón de ruta
+// POST /courses → 201 con id y title
+let nextCourseId = 1;
+app.post('/courses', (req, res) => {
+  const course = { id: nextCourseId++, ...req.body };
+  res.status(201).json(course);
+});
+
+// catch all para el resto de las rutas 
 app.use((req, res) => {
   res.sendStatus(404);
 });
