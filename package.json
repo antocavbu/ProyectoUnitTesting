@@ -7,7 +7,9 @@
   "scripts": {
     "start": "node -r @babel/register src/app.js",
     "dev": "nodemon --require @babel/register src/app.js",
-    "test": "cross-env NODE_ENV=test jest --coverage --runInBand"
+    "test": "cross-env NODE_ENV=test jest --coverage --runInBand",
+    "migrate:make":  "knex migrate:make --knexfile knexfile.cjs",
+    "migrate:latest":"knex migrate:latest --knexfile knexfile.cjs"
   },
   "keywords": [],
   "author": "",
