@@ -26,4 +26,23 @@ describe('Student CRUD (Red → Green)', () => {
         }
       })
   );
+ 
+  // test para obtener un estudiante por ID
+  it('GET /students/:id → debería devolver 200 con el estudiante correcto (Red)', async () => {
+    // Creamos un estudiante
+    const post = await request(app)
+      .post('/students')
+      .send({ name: 'Bob', email: 'bob@example.com' })
+      .expect(201);
+
+    const id = post.body.id;
+
+    // Intentamos obtenerlo por ID → falla (ruta no implementada)
+    await request(app)
+      .get(`/students/${id}`)
+      .expect(200)
+      .expect(res => {
+        if (res.body.id !== id) throw new Error('ID incorrecto');
+      });
+  });
 });
