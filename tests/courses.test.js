@@ -71,5 +71,26 @@ describe('Course CRUD (Red → Green)', () => {
         }
       });
   });
+  // Test Delete para borrar un curso" 
+  it('DELETE /courses/:id → debería devolver 204 y luego 404 al reconsultar', async () => {
+    // 1) Creamos un curso
+    const post = await request(app)
+      .post('/courses')
+      .send({ title: 'To Be Deleted' })
+      .expect(201);
+
+    const id = post.body.id;
+
+    // 2) Intentamos borrarlo
+    await request(app)
+      .delete(`/courses/${id}`)
+      .expect(204);
+
+    // 3) Y al pedirlo de nuevo, ya no existe → 404
+    await request(app)
+      .get(`/courses/${id}`)
+      .expect(404);
+  });
+
 
 });
