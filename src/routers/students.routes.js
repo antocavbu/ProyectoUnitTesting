@@ -3,6 +3,7 @@ import {
     createStudent,
     getAllStudents,
     getStudentById,
+    updateStudent,
 } from '../controllers/students.controller.js';
 
 const router = express.Router();
@@ -15,5 +16,8 @@ router.get('/', getAllStudents);
 
 // GET /students/:id → 200 + student específico
 router.get('/:id', getStudentById);
+
+// PUT /students/:id → 200 + student actualizado o 404
+router.put('/:id', updateStudent);
 
 export default router;

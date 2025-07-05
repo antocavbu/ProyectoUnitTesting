@@ -17,3 +17,13 @@ export const getStudentById = (req, res) => {
   if (!student) return res.sendStatus(404);
   res.status(200).json(student);
 };
+
+// PUT /students/:id → 200 + student actualizado o 404
+export const updateStudent = (req, res) => {
+  const id = Number(req.params.id);
+  const idx = students.findIndex(s => s.id === id);
+  if (idx === -1) return res.sendStatus(404);
+  students[idx] = { ...students[idx], ...req.body };
+  res.status(200).json(students[idx]);
+};
+
