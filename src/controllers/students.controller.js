@@ -6,3 +6,8 @@ export const createStudent = (req, res) => {
   students.push(student);
   res.status(201).json(student);
 };
+
+export const getAllStudents = (req, res) => {
+  res.status(200).json(students);
+};
+
