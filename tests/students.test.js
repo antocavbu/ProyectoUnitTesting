@@ -67,4 +67,20 @@ describe('Student CRUD (Red → Green)', () => {
         }
       });
   });
+  it('DELETE /students/:id → 204 y luego 404 al reconsultar', async () => {
+    // 1) Creamos un estudiante
+    const post = await request(app)
+      .post('/students')
+      .send({ name: 'Diana', email: 'diana@example.com' })
+      .expect(201);
+    const id = post.body.id;
+    // 2) Lo borramos
+    await request(app)
+      .delete(`/students/${id}`)
+      .expect(204);
+    // 3) Al pedirlo de nuevo → 404
+    await request(app)
+      .get(`/students/${id}`)
+      .expect(404);
+  });
 });
