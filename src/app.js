@@ -34,6 +34,15 @@ app.put('/courses/:id', (req, res) => {
   res.status(200).json(courses[idx]);
 });
 
+// DELETE /courses/:id → 204
+app.delete('/courses/:id', (req, res) => {
+  const id = Number(req.params.id); 
+  const idx = courses.findIndex(c => c.id === id);
+  if (idx === -1) return res.sendStatus(404);
+  courses.splice(idx, 1); // Eliminar el curso del array
+  res.sendStatus(204);
+});
+
 // catch all para el resto de las rutas 
 app.use((req, res) => {
   res.sendStatus(404);
