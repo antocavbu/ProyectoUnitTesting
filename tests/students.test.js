@@ -45,4 +45,26 @@ describe('Student CRUD (Red → Green)', () => {
         if (res.body.id !== id) throw new Error('ID incorrecto');
       });
   });
+
+  // test para actualizar un estudiante por ID
+  it('PUT /students/:id → debería devolver 200 con datos actualizados (Red)', async () => {
+    // 1) Creamos un estudiante
+    const post = await request(app)
+      .post('/students')
+      .send({ name: 'Charlie', email: 'charlie@example.com' })
+      .expect(201);
+
+    const id = post.body.id;
+
+    // 2) Intentamos actualizarlo
+    await request(app)
+      .put(`/students/${id}`)
+      .send({ name: 'Charlie Brown' })
+      .expect(200)
+      .expect(res => {
+        if (res.body.name !== 'Charlie Brown') {
+          throw new Error(`Name no actualizado, vino ${res.body.name}`);
+        }
+      });
+  });
 });
