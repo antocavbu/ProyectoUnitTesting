@@ -4,6 +4,7 @@ import {
     getAllStudents,
     getStudentById,
     updateStudent,
+    deleteStudent
 } from '../controllers/students.controller.js';
 
 const router = express.Router();
@@ -19,5 +20,8 @@ router.get('/:id', getStudentById);
 
 // PUT /students/:id → 200 + student actualizado o 404
 router.put('/:id', updateStudent);
+
+// DELETE /students/:id → 204
+router.delete('/:id', deleteStudent);
 
 export default router;
