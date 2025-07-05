@@ -11,3 +11,9 @@ export const getAllStudents = (req, res) => {
   res.status(200).json(students);
 };
 
+export const getStudentById = (req, res) => {
+  const id = Number(req.params.id);
+  const student = students.find(s => s.id === id);
+  if (!student) return res.sendStatus(404);
+  res.status(200).json(student);
+};
