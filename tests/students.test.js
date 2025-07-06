@@ -84,3 +84,18 @@ describe('Student CRUD (Red → Green)', () => {
       .expect(404);
   });
 });
+
+  describe('Error handling for /students', () => {
+  it('PUT /students/:id → 404 when student does not exist', () =>
+    request(app)
+      .put('/students/9999')
+      .send({ name: 'Nobody' })
+      .expect(404)
+  );
+
+  it('DELETE /students/:id → 404 when student does not exist', () =>
+    request(app)
+      .delete('/students/9999')
+      .expect(404)
+  );
+});

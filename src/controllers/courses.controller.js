@@ -40,15 +40,21 @@ export const deleteCourse = async (req, res) => {
 };
 
 export const enrollStudent = async (req, res) => {
-  const { courseId, studentId } = req.params;
+  const courseId  = Number(req.params.courseId);
+  const studentId = Number(req.params.studentId);
+
+  // Verificar que existan ambos
   const course  = await db('courses').where({ id: courseId }).first();
   const student = await db('students').where({ id: studentId }).first();
-  if (!course || !student) return res.sendStatus(404);
+  if (!course || !student) {
+    return res.sendStatus(404);
+  }
 
+  // Insertar en enrollments (ignorar duplicados)
   await db('enrollments')
     .insert({ course_id: courseId, student_id: studentId })
-    .onConflict(['course_id','student_id'])
+    .onConflict(['course_id', 'student_id'])
     .ignore();
 
-  res.sendStatus(204);
+  return res.sendStatus(204);
 };

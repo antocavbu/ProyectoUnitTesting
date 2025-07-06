@@ -13,13 +13,16 @@ export const getAllStudents = async (req, res) => {
 };
 
 export const getStudentById = async (req, res) => {
-  const { id } = req.params;
+  const id = Number(req.params.id);
   const student = await db('students').where({ id }).first();
   if (!student) return res.sendStatus(404);
+
+  // Traer los cursos en los que está inscrito
   const courses = await db('courses')
     .join('enrollments', 'courses.id', 'enrollments.course_id')
     .where('enrollments.student_id', id)
     .select('courses.id', 'courses.title');
+
   res.status(200).json({ ...student, courses });
 };
 
@@ -37,3 +40,4 @@ export const deleteStudent = async (req, res) => {
   if (!count) return res.sendStatus(404);
   res.sendStatus(204);
 };
+

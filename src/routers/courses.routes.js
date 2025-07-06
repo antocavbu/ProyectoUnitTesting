@@ -4,7 +4,8 @@ import {
   getAllCourses,
   getCourseById,
   updateCourse,
-  deleteCourse
+  deleteCourse,
+  enrollStudent
 } from '../controllers/courses.controller.js';
 
 const router = express.Router();
@@ -23,5 +24,8 @@ router.put('/:id', updateCourse);
 
 // DELETE /courses/:id → 204
 router.delete('/:id', deleteCourse);
+
+// POST /courses/:courseId/enroll/:studentId → 204
+router.post('/:courseId/enroll/:studentId', enrollStudent);
 
 export default router;

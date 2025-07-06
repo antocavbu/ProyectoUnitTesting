@@ -92,5 +92,19 @@ describe('Course CRUD (Red → Green)', () => {
       .expect(404);
   });
 
+});
 
+describe('Error handling for /courses', () => {
+  it('PUT /courses/:id → 404 when course does not exist', () =>
+    request(app)
+      .put('/courses/9999')
+      .send({ title: 'No Title' })
+      .expect(404)
+  );
+
+  it('DELETE /courses/:id → 404 when course does not exist', () =>
+    request(app)
+      .delete('/courses/9999')
+      .expect(404)
+  );
 });
