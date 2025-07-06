@@ -1,6 +1,14 @@
 import request from 'supertest';
 import app from '../src/app.js';
 
+describe('App configuration', () => {
+  it('should handle 404 for unknown routes', () =>
+    request(app)
+      .get('/unknown-route')
+      .expect(404)
+  );
+});
+
 describe('Course CRUD (Red → Green)', () => {
   // --- Nuevo test RED: para todas las rutas que no existen
   it('GET /courses → 404 mientras no exista la ruta', () =>
@@ -95,16 +103,16 @@ describe('Course CRUD (Red → Green)', () => {
 });
 
 describe('Error handling for /courses', () => {
-  it('PUT /courses/:id → 404 when course does not exist', () =>
-    request(app)
+  it('404 cases - PUT and DELETE non-existent courses', async () => {
+    // PUT course inexistente
+    await request(app)
       .put('/courses/9999')
       .send({ title: 'No Title' })
-      .expect(404)
-  );
+      .expect(404);
 
-  it('DELETE /courses/:id → 404 when course does not exist', () =>
-    request(app)
+    // DELETE course inexistente
+    await request(app)
       .delete('/courses/9999')
-      .expect(404)
-  );
+      .expect(404);
+  });
 });

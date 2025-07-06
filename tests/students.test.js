@@ -85,17 +85,17 @@ describe('Student CRUD (Red → Green)', () => {
   });
 });
 
-  describe('Error handling for /students', () => {
-  it('PUT /students/:id → 404 when student does not exist', () =>
-    request(app)
+describe('Error handling for /students', () => {
+  it('404 cases - PUT and DELETE non-existent students', async () => {
+    // PUT student inexistente
+    await request(app)
       .put('/students/9999')
       .send({ name: 'Nobody' })
-      .expect(404)
-  );
+      .expect(404);
 
-  it('DELETE /students/:id → 404 when student does not exist', () =>
-    request(app)
+    // DELETE student inexistente
+    await request(app)
       .delete('/students/9999')
-      .expect(404)
-  );
+      .expect(404);
+  });
 });

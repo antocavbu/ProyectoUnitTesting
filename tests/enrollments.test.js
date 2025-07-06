@@ -20,19 +20,18 @@ describe('Enrollment endpoints (Red → Green)', () => {
     student = studentRes.body;
   });
 
-  it('POST /courses/:courseId/enroll/:studentId → 404 si no existe curso o estudiante', async () => {
-  // curso inválido
-  await request(app)
-    .post(`/courses/999/enroll/${student.id}`)
-    .expect(404);
+  it('POST enrollment → 404 for non-existent course/student and 204 for success', async () => {
+    // curso inválido
+    await request(app)
+      .post(`/courses/999/enroll/${student.id}`)
+      .expect(404);
 
-  // estudiante inválido
-  await request(app)
-    .post(`/courses/${course.id}/enroll/999`)
-    .expect(404);
-});
+    // estudiante inválido
+    await request(app)
+      .post(`/courses/${course.id}/enroll/999`)
+      .expect(404);
 
-  it('POST /courses/:courseId/enroll/:studentId → 204 (inscripción exitosa)', async () => {
+    // inscripción exitosa
     await request(app)
       .post(`/courses/${course.id}/enroll/${student.id}`)
       .expect(204);
@@ -68,5 +67,17 @@ describe('Enrollment endpoints (Red → Green)', () => {
         expect.objectContaining({ id: course.id, title: course.title })
       ])
     );
+  });
+
+  it('POST enrollment duplicado → 204 (ignora duplicados)', async () => {
+    // Primera inscripción
+    await request(app)
+      .post(`/courses/${course.id}/enroll/${student.id}`)
+      .expect(204);
+
+    // Segunda inscripción (duplicada) - debería ignorarse
+    await request(app)
+      .post(`/courses/${course.id}/enroll/${student.id}`)
+      .expect(204);
   });
 });
