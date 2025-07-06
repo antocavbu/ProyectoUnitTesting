@@ -1,36 +1,54 @@
-// Data storage (in-memory)
-const courses = [];
-let nextCourseId = 1;
+import db from '../db.js';
 
 // Controller functions
-export const createCourse = (req, res) => {
-  const course = { id: nextCourseId++, ...req.body };
-  courses.push(course);
+export const createCourse = async (req, res) => {
+  const { title } = req.body;
+  const [id] = await db('courses').insert({ title });
+  const course = await db('courses').where({ id }).first();
   res.status(201).json(course);
 };
 
-export const getAllCourses = (req, res) => {
+export const getAllCourses = async (req, res) => {
+  const courses = await db('courses').select();
   res.status(200).json(courses);
 };
 
-export const getCourseById = (req, res) => {
-  const course = courses.find(c => c.id === Number(req.params.id));
+export const getCourseById = async (req, res) => {
+  const { id } = req.params;
+  const course = await db('courses').where({ id }).first();
   if (!course) return res.sendStatus(404);
+  const students = await db('students')
+    .join('enrollments', 'students.id', 'enrollments.student_id')
+    .where('enrollments.course_id', id)
+    .select('students.id', 'students.name', 'students.email');
+  res.status(200).json({ ...course, students });
+};
+
+export const updateCourse = async (req, res) => {
+  const { id } = req.params;
+  const count = await db('courses').where({ id }).update({ title: req.body.title });
+  if (!count) return res.sendStatus(404);
+  const course = await db('courses').where({ id }).first();
   res.status(200).json(course);
 };
 
-export const updateCourse = (req, res) => {
-  const id = Number(req.params.id);
-  const idx = courses.findIndex(c => c.id === id);
-  if (idx === -1) return res.sendStatus(404);
-  courses[idx] = { ...courses[idx], ...req.body };
-  res.status(200).json(courses[idx]);
+export const deleteCourse = async (req, res) => {
+  const { id } = req.params;
+  const count = await db('courses').where({ id }).del();
+  if (!count) return res.sendStatus(404);
+  res.sendStatus(204);
 };
 
-export const deleteCourse = (req, res) => {
-  const id = Number(req.params.id);
-  const idx = courses.findIndex(c => c.id === id);
-  if (idx === -1) return res.sendStatus(404);
-  courses.splice(idx, 1);
+export const enrollStudent = async (req, res) => {
+  const { courseId, studentId } = req.params;
+  const course  = await db('courses').where({ id: courseId }).first();
+  const student = await db('students').where({ id: studentId }).first();
+  if (!course || !student) return res.sendStatus(404);
+
+  await db('enrollments')
+    .insert({ course_id: courseId, student_id: studentId })
+    .onConflict(['course_id','student_id'])
+    .ignore();
+
   res.sendStatus(204);
 };
